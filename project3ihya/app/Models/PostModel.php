@@ -8,19 +8,18 @@ class PostModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    // WAJIB diisi agar bisa insert/update
-    protected $allowedFields    = [
-        'title',
-        'slug',
-        'content',
-        'image',
-        'created_at'
-    ];
-    // Aktifkan timestamps otomatis
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = null; // kita tidak pakai updated_at
-    protected $dateFormat    = 'datetime';
+   protected $allowedFields = [
+    'title',
+    'slug',
+    'content',
+    'image',
+    'status',
+    'author'
+];
+
+protected $useTimestamps = true;
+protected $createdField  = 'created_at';
+protected $updatedField  = 'updated_at';
     // Optional (biar lebih aman & rapi)
     protected $validationRules = [
         'title' => 'required|min_length[3]',

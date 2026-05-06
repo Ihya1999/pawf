@@ -13,7 +13,7 @@ use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 
-// 🔥 TAMBAHAN DARI Myth/Auth
+// Myth/Auth
 use Myth\Auth\Filters\LoginFilter;
 use Myth\Auth\Filters\PermissionFilter;
 use Myth\Auth\Filters\RoleFilter;
@@ -31,7 +31,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
 
-        // 🔥 Myth/Auth Filters
+        // Myth/Auth
         'login'         => LoginFilter::class,
         'role'          => RoleFilter::class,
         'permission'    => PermissionFilter::class,
@@ -39,8 +39,7 @@ class Filters extends BaseFilters
 
     public array $required = [
         'before' => [
-            // 'forcehttps', // aktifin kalau pakai HTTPS
-            // 'pagecache',
+            // 'forcehttps',
         ],
         'after' => [
             'pagecache',
@@ -61,12 +60,15 @@ class Filters extends BaseFilters
     public array $methods = [];
 
     public array $filters = [
-        // 🔥 WAJIB LOGIN untuk semua halaman admin
-        'login' => ['before' => ['admin/*']],
+        //Proteksi semua halaman admin
+        'login' => [
+            'before' => [
+                'admin/*',
+                '-admin/logout' //penting: biar logout gak diblok
+            ],
+        ],
 
-        // 🔥 CONTOH ROLE (optional, bisa lu pakai nanti)
+        // opsi (kalau nanti mau pakai role)
         // 'role:admin' => ['before' => ['admin/*']],
-        // 'role:pengurus' => ['before' => ['pengurus/*']],
-        // 'role:anggota' => ['before' => ['anggota/*']],
     ];
 }

@@ -1,83 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyBlog</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>" />
+    <title>New Post - MyBlog</title>
+
+    <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #0d6efd, #6610f2);
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #0d6efd, #6610f2);
+            color: white;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+
+        .btn-lg {
+            font-weight: 600;
+            border-radius: 12px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+    </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="<?= base_url() ?>">MyBlog</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/post') ?>">Blog</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="<?= base_url('admin/post/new') ?>"
-                           class="btn btn-primary mr-3">New Post</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/setting') ?>">Setting</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('auth/logout') ?>">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container py-5">
-            <h1 class="display-5 fw-bold">Blog > Admin</h1>
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark shadow">
+    <div class="container d-flex justify-content-between">
+        <span class="navbar-brand fw-bold">MyBlog Admin</span>
+        <div>
+            <a href="<?= base_url('admin/post') ?>" class="btn btn-light btn-sm">← Back</a>
         </div>
     </div>
-    
-    <!-- create post -->
+</nav>
+
+<!-- HERO -->
+<div class="hero p-4 mb-4">
     <div class="container">
+        <h2 class="fw-bold">Create New Post</h2>
+        <p>Tulis dan publish artikel untuk blog kamu</p>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <div class="card p-4">
+
         <form action="" method="post" id="text-editor">
-            <div class="form-group mb-2">
-                <label for="title">Title</label>
-                <input type="text" name="title" class="form-control"
-                    placeholder="Post title" required>
+
+            <!-- TITLE -->
+            <div class="mb-4">
+                <label class="form-label">Title</label>
+
+                <input type="text"
+                       name="title"
+                       id="titleInput"
+                       class="form-control form-control-lg"
+                       placeholder="Masukkan judul artikel..."
+                       required maxlength="100">
+
+                <div class="d-flex justify-content-between mt-2">
+                    <small class="text-muted">Judul akan ditampilkan di halaman publik</small>
+                    <small id="charCount" class="text-muted">0 / 100</small>
+                </div>
             </div>
-            <div class="form-group mb-2">
+
+            <!-- CONTENT -->
+            <div class="mb-4">
+                <label class="form-label">Content</label>
                 <textarea name="content" class="form-control" cols="30" rows="10"
-                        placeholder="Write a great post!"></textarea>
+                    placeholder="Detail Artikel"></textarea>
             </div>
-            <div class="form-group">
-                <button type="submit" name="status" value="published"
-                        class="btn btn-primary">Publish</button>
-                <button type="submit" name="status" value="draft"
-                        class="btn btn-secondary">Save to Draft</button>
+
+            <!-- ACTION BUTTONS -->
+            <div class="card p-3 shadow-sm border-0 mb-2">
+                <div class="row g-2">
+
+                    <div class="col-md-6">
+                        <button type="submit"
+                                name="status"
+                                value="published"
+                                class="btn btn-success btn-lg w-100">
+                            🚀 Publish Post
+                        </button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <button type="submit"
+                                name="status"
+                                value="draft"
+                                class="btn btn-outline-secondary btn-lg w-100">
+                            💾 Save Draft
+                        </button>
+                    </div>
+
+                </div>
             </div>
+
+            <!-- INFO -->
+            <div class="alert alert-info">
+                💡 Tips: Publish untuk menampilkan artikel ke publik, Draft untuk simpan sementara.
+            </div>
+
         </form>
+
     </div>
 
+</div>
 
-    <div class="container py-4">
-        <footer class="pt-3 mt-4 text-muted border-top">
-            <div class="container">
-                &copy; <?= Date('Y') ?>
-            </div>
-        </footer>
-    </div>
+<!-- FOOTER -->
+<footer class="text-center mt-5 mb-3">
+    <small>&copy; <?= date('Y') ?> MyBlog</small>
+</footer>
 
-    <!-- jQuery dan Bootstrap JS -->
-    <script src="<?= base_url('js/jquery.min.js') ?>"></script>
-    <script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= base_url('js/jquery.min.js') ?>"></script>
+<script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+
+<script>
+$('#summernote').summernote({
+    height: 300
+});
+
+// character counter
+const titleInput = document.getElementById('titleInput');
+const charCount = document.getElementById('charCount');
+
+titleInput.addEventListener('input', function () {
+    charCount.textContent = this.value.length + ' / 100';
+});
+</script>
 
 </body>
 </html>

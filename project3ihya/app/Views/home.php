@@ -1,62 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>MyBlog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Straw Hat Blog</title>
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    background: #0b0f19;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+    background: linear-gradient(90deg, #ff2d55, #ff9500);
+}
+
+/* HERO */
+.hero {
+    background: url('https://images3.alphacoders.com/134/thumb-1920-1342304.jpeg') center/cover;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+.hero-content {
+    position: relative;
+    text-align: center;
+}
+
+/* CARD */
+.blog-card {
+    background: #111827;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+}
+
+.blog-card img {
+    height: 180px;
+    object-fit: cover;
+}
+
+/* BUTTON */
+.btn-anime {
+    background: linear-gradient(90deg, #ff2d55, #ff9500);
+    border: none;
+    color: white;
+}
+
+.btn-anime:hover {
+    opacity: 0.9;
+}
+</style>
+
 </head>
 
 <body>
+<?= $this->include('layouts/navbar'); ?>
 
-	<?= $this->include('layouts/navbar'); ?>
-
-	<div class="p-5 mb-4 bg-light rounded-3">
-      <div class="container py-5">
-        <h1 class="display-5 fw-bold">Selamat Datang</h1>
-        <!-- <p class="col-md-8 fs-4">di laman portal berita</p> -->
-        <!-- <button class="btn btn-primary btn-sm" type="button">Read more</button> -->
-      </div>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="display-4 fw-bold">One Piece & Anime Blog</h1>
+        <p class="lead">Cerita Dunia Bajak Laut Terbaik</p>
+        <a href="#posts" class="btn btn-anime btn-lg">Mulai Baca</a>
     </div>
+</section>
 
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12 my-2 card">
-				<div class="card-body">
-					<h5 class="h5">Mulai ngoding PHP nich</h5>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam perferendis commodi tenetur quos ducimus repellat nulla, nam magni. Commodi iusto ad harum voluptas exercitationem facere eos earum laboriosam excepturi quas?</p>
-				</div>
-			</div>
-			<div class="col-md-12 my-2 card">
-				<div class="card-body">
-					<h5 class="h5">Jadi paham CSS dan JS</h5>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam perferendis commodi tenetur quos ducimus repellat nulla, nam magni. Commodi iusto ad harum voluptas exercitationem facere eos earum laboriosam excepturi quas?</p>
-				</div>
-			</div>
-			<div class="col-md-12 my-2 card">
-				<div class="card-body">
-					<h5 class="h5">Codeigniter asyik juga kok</h5>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam perferendis commodi tenetur quos ducimus repellat nulla, nam magni. Commodi iusto ad harum voluptas exercitationem facere eos earum laboriosam excepturi quas?</p>
-				</div>
-			</div>
-			
-		</div>
-	</div>
-	<div class="container py-4">
-		<footer class="pt-3 mt-4 text-muted border-top">
-			<div class="container">
-				&copy; <?= Date('Y') ?>
-			</div>
-		</footer>
-	</div>
+<!-- POSTS -->
+<div class="container py-5" id="posts">
 
-	<!-- Jquery dan Bootsrap JS -->
-	<script src="<?= base_url('js/jquery.min.js') ?>"></script>
-	<script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
+    <h2 class="mb-4">🔥 Latest Posts</h2>
+
+    <div class="row g-4">
+
+        <!-- CARD 1 -->
+        <div class="col-md-4">
+            <div class="card blog-card">
+                <img src="https://images4.alphacoders.com/134/thumb-1920-1348641.jpeg" class="w-100">
+                <div class="card-body">
+                    <h5>One Piece Latest Arc</h5>
+                    <p class="text-secondary">Review cerita terbaru Luffy & kru.</p>
+                    <a href="#" class="btn btn-anime btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="col-md-4">
+            <div class="card blog-card">
+                <img src="https://images.alphacoders.com/135/thumb-1920-1350257.jpeg" class="w-100">
+                <div class="card-body">
+                    <h5>Top Anime 2026</h5>
+                    <p class="text-secondary">Anime paling hype tahun ini.</p>
+                    <a href="#" class="btn btn-anime btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="col-md-4">
+            <div class="card blog-card">
+                <img src="https://images8.alphacoders.com/137/thumb-1920-1370478.jpeg" class="w-100">
+                <div class="card-body">
+                    <h5>Straw Hat Pirates</h5>
+                    <p class="text-secondary">Profil lengkap kru Luffy.</p>
+                    <a href="#" class="btn btn-anime btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center py-4 text-secondary">
+    © <?= date('Y') ?> AnimeBlog
+</footer>
 
 </body>
-
 </html>

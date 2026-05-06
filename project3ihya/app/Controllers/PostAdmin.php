@@ -11,17 +11,18 @@ class PostAdmin extends BaseController
     // ================= LIST =================
     public function index()
     {
-        $postModel = new PostModel();
-        $data['posts'] = $postModel->findAll();
+        $post = new PostModel();
 
-        return view('admin/admin_post_list', $data);
+        return view('admin/admin_post_list', [
+            'posts' => $post->findAll()
+        ]);
     }
 
     // ================= PREVIEW =================
-    public function preview($id)
+    public function preview(int $id)
     {
-        $postModel = new PostModel();
-        $data['post'] = $postModel->find($id);
+        $post = new PostModel();
+        $data['post'] = $post->find($id);
 
         if (!$data['post']) {
             throw PageNotFoundException::forPageNotFound();
@@ -30,59 +31,98 @@ class PostAdmin extends BaseController
         return view('post_detail', $data);
     }
 
-    // ================= CREATE =================
+    // ================= CREATE FORM =================
     public function create()
     {
-        if ($this->request->getMethod() === 'post') {
-
-            $postModel = new PostModel();
-
-            $postModel->insert([
-                "title"   => $this->request->getPost('title'),
-                "content" => $this->request->getPost('content'),
-                "status"  => $this->request->getPost('status'),
-                "slug"    => url_title($this->request->getPost('title'), '-', true)
-            ]);
-
-            return redirect()->to('/admin/post');
-        }
-
         return view('admin/admin_post_create');
     }
 
-    // ================= EDIT =================
-    public function edit($id)
+    // ================= STORE =================
+    public function store()
     {
-        $postModel = new PostModel();
+        $validation = \Config\Services::validation();
 
-        $data['post'] = $postModel->find($id);
+        $validation->setRules([
+            'title' => 'required'
+        ]);
 
-        // ❗ kalau data tidak ada
-        if (!$data['post']) {
-            throw PageNotFoundException::forPageNotFound();
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('error', 'Judul wajib diisi');
         }
 
-        // kalau submit
-        if ($this->request->getMethod() === 'post') {
+        $post = new PostModel();
 
-            $postModel->update($id, [
-                "title"   => $this->request->getPost('title'),
-                "content" => $this->request->getPost('content'),
-                "status"  => $this->request->getPost('status')
-            ]);
+        $post->insert([
+            "title"   => $this->request->getPost('title'),
+            "content" => $this->request->getPost('content'),
+            "status"  => $this->request->getPost('status'),
+            "slug"    => url_title($this->request->getPost('title'), '-', true),
+            "author"  => session()->get('nama') ?? 'Admin'
+        ]);
 
-            return redirect()->to('/admin/post');
+        return redirect()->to('admin/post')->with('success', 'Post berhasil dibuat!');
+    }
+
+    // ================= EDIT =================
+    public function edit(int $id)
+    {
+        $post = new PostModel();
+        $data['post'] = $post->find($id);
+
+        if (!$data['post']) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         return view('admin/admin_post_update', $data);
     }
 
-    // ================= DELETE =================
-    public function delete($id)
+    // ================= UPDATE =================
+    public function update(int $id)
     {
-        $postModel = new PostModel();
-        $postModel->delete($id);
+        $post = new PostModel();
 
-        return redirect()->to('/admin/post');
+        $post->update($id, [
+            "title"   => $this->request->getPost('title'),
+            "content" => $this->request->getPost('content'),
+            "status"  => $this->request->getPost('status')
+        ]);
+
+        return redirect()->to('admin/post')->with('success', 'Post berhasil diperbarui!');
+    }
+
+    // ================= DELETE =================
+    public function delete(int $id)
+    {
+        $post = new PostModel();
+
+        if (!$post->find($id)) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        $post->delete($id);
+
+        return redirect()->to('admin/post')->with('success', 'Post berhasil dihapus!');
+    }
+
+    // ================= UPLOAD IMAGE (SUMMERNOTE) =================
+    public function uploadImage()
+    {
+        $file = $this->request->getFile('file');
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+
+            // rename file biar aman
+            $newName = $file->getRandomName();
+
+            // simpan ke public/uploads
+            $file->move('uploads', $newName);
+
+            // return URL gambar
+            return $this->response->setBody(
+                base_url('uploads/' . $newName)
+            );
+        }
+
+        return $this->response->setStatusCode(400, 'Upload gagal');
     }
 }

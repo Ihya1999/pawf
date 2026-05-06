@@ -1,51 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="container mt-4">
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>MyBlog</title>
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Daftar Post</h5>
+            <a href="<?= base_url('admin/post/new') ?>" class="btn btn-primary btn-sm">
+                + New Post
+            </a>
+        </div>
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>" />
-</head>
+        <div class="card-body">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th width="220">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($posts as $post): ?>
+                    <tr>
+                        <td><?= $post['id'] ?></td>
 
-<body>
+                        <td>
+                            <strong><?= $post['title'] ?></strong><br>
+                            <small class="text-muted"><?= $post['created_at'] ?></small>
+                        </td>
 
-	<?= $this->include('layouts/navbar'); ?>
+                        <td>
+                            <?php if($post['status'] === 'published'): ?>
+                                <span class="badge bg-success">Published</span>
+                            <?php else: ?>
+                                <span class="badge bg-secondary">Draft</span>
+                            <?php endif ?>
+                        </td>
 
-	<div class="p-5 mb-4 bg-light rounded-3">
-      <div class="container py-5">
-        <h1 class="display-5 fw-bold">Blog</h1>
-        <!-- <p class="col-md-8 fs-4">di laman portal berita</p> -->
-        <!-- <button class="btn btn-primary btn-sm" type="button">Read more</button> -->
-      </div>
+                        <td>
+                            <a href="<?= base_url('admin/post/'.$post['id'].'/preview') ?>"
+                               class="btn btn-sm btn-outline-primary" target="_blank">Preview</a>
+
+                            <a href="<?= base_url('admin/post/'.$post['id'].'/edit') ?>"
+                               class="btn btn-sm btn-outline-warning">Edit</a>
+
+                            <a href="#"
+                               data-href="<?= base_url('admin/post/'.$post['id'].'/delete') ?>"
+                               onclick="confirmToDelete(this)"
+                               class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-	<div class="container">
-		<div class="row">
-			<?php foreach ($posts as $post) : ?>
-				<div class="col-md-12 my-2 card">
-					<div class="card-body">
-						<h5 class="h5"><a href="/post/<?= $post['slug'] ?>"><?= $post['title'] ?></a></h5>
-						<p><?= substr($post['content'], 0, 120) ?></p>
-					</div>
-				</div>
-			<?php endforeach ?>
-		</div>
-	</div>
-	<div class="container py-4">
-		<footer class="pt-3 mt-4 text-muted border-top">
-			<div class="container">
-				&copy; <?= Date('Y') ?>
-			</div>
-		</footer>
-	</div>
-
-	<!-- Jquery dan Bootsrap JS -->
-	<script src="<?= base_url('js/jquery.min.js') ?>"></script>
-	<script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
-
-</body>
-
-</html>
+</div>

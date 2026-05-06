@@ -1,33 +1,10 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#">MyBlog</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-			<a class="nav-link" href="<?= base_url('about') ?>">About</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="<?= base_url('post') ?>">Blog</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="<?= base_url('contact') ?>">Contact</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="<?= base_url('faqs') ?>">FAQ</a>
-		</li>
-        
-      </ul>
-      <form class="d-flex" role="search">
-        <button class="btn btn-outline-success" type="submit">
-        //
-        </button>
-      </form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="<?= base_url() ?>">MyBlog Admin</a>
+
+        <div class="d-flex gap-2">
+            <a href="<?= base_url('admin/post') ?>" class="btn btn-outline-light btn-sm">Post</a>
+            <a href="<?= base_url('admin/logout') ?>" class="btn btn-danger btn-sm">Logout</a>
+        </div>
     </div>
-  </div>
 </nav>
