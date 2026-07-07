@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "anime-blog",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["anime_blog/manage.py", "runserver", "8002", "--noreload"],
+      "port": 8002
+    }
+  ]
+}

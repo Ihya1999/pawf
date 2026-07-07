@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% comment %}
+============================================================
+HALAMAN DETAIL ARTIKEL (post_detail.html)
+Menampilkan artikel lengkap, form komentar, daftar komentar
+yang sudah disetujui, dan rekomendasi artikel terkait.
+CATATAN: {% extends %} WAJIB menjadi tag pertama di template.
+============================================================
+{% endcomment %}
+
+{% block title %}{{ post.title }} — AniBlog{% endblock %}
+
+{% block content %}
+
+    <article class="post-detail">
+        <!-- Kepala artikel -->
+        {% if post.category %}
+            <a href="{% url 'blog:category' post.category.slug %}" class="card-category">
+                {{ post.category.name }}
+            </a>
+        {% endif %}
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="card-meta">
+            <span>✍ {{ post.author }}</span>
+            <span>📅 {{ post.created_at|date:"d F Y" }}</span>
+            <span>⏱ {{ post.reading_time }} menit baca</span>
+            <span>👁 {{ post.views }} dilihat</span>
+            {% if post.rating %}
+                <span class="rating-badge inline">★ {{ post.rating }}/10</span>
+            {% endif %}
+        </div>
+
+        {% if post.cover_url %}
+            <img src="{{ post.cover_url }}" alt="{{ post.title }}" class="post-cover">
+        {% endif %}
+
+        {# Filter |linebreaks otomatis mengubah baris kosong menjadi paragraf — penulis cukup menulis teks biasa. #}
+        <div class="post-content">{{ post.content|linebreaks }}</div>
+    </article>
+
+    <!-- ==================== ARTIKEL TERKAIT ==================== -->
+    {% if related_posts %}
+        <section class="related">
+            <h3 class="section-title">🎬 Artikel Terkait</h3>
+            <div class="related-grid">
+                {% for rp in related_posts %}
+                    <a href="{{ rp.get_absolute_url }}" class="related-card">
+                        {% if rp.cover_url %}
+                            <img src="{{ rp.cover_url }}" alt="{{ rp.title }}" loading="lazy">
+                        {% else %}
+                            <div class="cover-placeholder small">アニメ</div>
+                        {% endif %}
+                        <span>{{ rp.title }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- ==================== KOMENTAR ==================== -->
+    <section class="comments" id="komentar">
+        <h3 class="section-title">
+            💬 Komentar ({{ post.approved_comments.count }})
+        </h3>
+
+        {# Hanya komentar yang SUDAH DISETUJUI admin yang tampil (sistem moderasi anti-spam). #}
+        {% for comment in post.approved_comments %}
+            <div class="comment">
+                <div class="comment-avatar">{{ comment.name|first|upper }}</div>
+                <div>
+                    <strong>{{ comment.name }}</strong>
+                    <small class="muted">{{ comment.created_at|date:"d M Y H:i" }}</small>
+                    <p>{{ comment.body|linebreaksbr }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p class="muted">Belum ada komentar. Jadilah yang pertama!</p>
+        {% endfor %}
+
+        <!-- Form kirim komentar (tanpa perlu login) -->
+        <div class="comment-form">
+            <h4>Tinggalkan Komentar</h4>
+            <form method="post">
+                {# csrf_token WAJIB: token keamanan Django untuk melindungi form dari serangan CSRF. #}
+                {% csrf_token %}
+                {{ form.name }}
+                {{ form.body }}
+                {{ form.errors }}
+                <button type="submit" class="btn-primary">Kirim Komentar</button>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

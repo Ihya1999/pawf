@@ -1,0 +1,523 @@
+/* ============================================================
+   TEMA ANIME MODERN "AURORA GLASS" — style.css
+   ============================================================
+   INOVASI DESAIN MODERN:
+   1. GLASSMORPHISM  : navbar & kartu semi-transparan dengan efek
+                       blur kaca (backdrop-filter) ala macOS/iOS.
+   2. AURORA GLOW    : cahaya gradien ungu-pink lembut di latar,
+                       tren desain web modern 2024+.
+   3. FONT MODERN    : "Plus Jakarta Sans" (karya desainer
+                       Indonesia!) untuk kesan bersih & premium.
+   4. MICRO-INTERACTION : animasi halus saat hover (kartu terangkat,
+                       gambar zoom, tombol berkilau).
+   5. CSS VARIABLES  : ganti warna di :root, seluruh tema berubah.
+   ============================================================ */
+
+:root {
+    /* Palet warna utama — ubah di sini untuk ganti tema */
+    --bg: #0a0a12;              /* latar belakang gelap pekat */
+    --bg-card: rgba(255, 255, 255, 0.04);   /* kartu kaca transparan */
+    --bg-glass: rgba(10, 10, 18, 0.65);     /* kaca navbar */
+    --accent: #f43f8e;          /* pink neon (aksen utama) */
+    --accent-2: #8b5cf6;        /* ungu violet (aksen kedua) */
+    --accent-3: #22d3ee;        /* cyan (aksen ketiga, sentuhan segar) */
+    --text: #f1f0f5;            /* teks utama */
+    --text-muted: #8f8da3;      /* teks redup */
+    --border: rgba(255, 255, 255, 0.08);    /* garis halus transparan */
+    --radius: 18px;             /* sudut membulat konsisten */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }   /* scroll halus saat klik anchor #komentar */
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.75;
+    /* AURORA GLOW: dua "lampu" gradien radial di latar belakang
+       memberi kedalaman tanpa mengganggu keterbacaan. */
+    background-image:
+        radial-gradient(ellipse 60% 40% at 15% -5%, rgba(139, 92, 246, 0.18), transparent 60%),
+        radial-gradient(ellipse 50% 35% at 90% 10%, rgba(244, 63, 142, 0.13), transparent 60%);
+    background-attachment: fixed;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+img { max-width: 100%; }
+::selection { background: var(--accent-2); color: #fff; }
+
+/* Scrollbar kustom agar senada dengan tema */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--accent-2), var(--accent));
+    border-radius: 10px;
+}
+
+.container { max-width: 1140px; margin: 0 auto; padding: 0 1.2rem; }
+.muted { color: var(--text-muted); }
+
+/* ==================== NAVBAR KACA (GLASSMORPHISM) ==================== */
+.navbar {
+    /* backdrop-filter memburamkan konten di belakang navbar,
+       menciptakan efek kaca beku (frosted glass) modern. */
+    background: var(--bg-glass);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+}
+.logo {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    /* Teks gradien: tren tipografi modern, warna mengalir
+       dari ungu ke pink lalu cyan. */
+    background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.logo span { color: transparent; }
+
+.search-form { display: flex; align-items: center; gap: 0.45rem; }
+.search-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;        /* bentuk pil penuh, khas UI modern */
+    outline: none;
+    width: 190px;
+    font-family: inherit;
+    transition: border-color 0.25s, width 0.35s ease, box-shadow 0.25s;
+}
+/* MICRO-INTERACTION: kotak pencarian melebar + berpendar saat fokus */
+.search-input:focus {
+    border-color: var(--accent-2);
+    width: 260px;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+}
+.search-input::placeholder { color: var(--text-muted); }
+.search-btn {
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.search-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 18px rgba(244, 63, 142, 0.45);
+}
+
+/* ==================== NAVIGASI KATEGORI (CHIP PIL) ==================== */
+.category-nav {
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;       /* sembunyikan scrollbar horizontal */
+}
+.category-nav::-webkit-scrollbar { display: none; }
+.category-nav .container { padding: 0.7rem 1.2rem; display: flex; gap: 0.5rem; }
+/* Kategori berbentuk "chip" pil — pola navigasi aplikasi modern */
+.category-nav a {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.32rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.22s;
+}
+.category-nav a:hover {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+}
+
+/* ==================== LAYOUT KONTEN + SIDEBAR ==================== */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 310px;
+    gap: 2.2rem;
+    padding: 2.2rem 1.2rem 3rem;
+}
+@media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }   /* sidebar turun di HP */
+}
+
+/* ==================== HERO / BANNER ==================== */
+.hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse 80% 120% at 85% -20%, rgba(34, 211, 238, 0.22), transparent 55%),
+        linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(244, 63, 142, 0.28)),
+        rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) + 6px);
+    padding: 3rem 2.4rem;
+    margin-bottom: 2.4rem;
+}
+.hero h1 {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);   /* ukuran adaptif mengikuti layar */
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.6rem;
+}
+.hero h1 span {
+    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.hero p { color: var(--text-muted); max-width: 480px; font-size: 1.02rem; }
+/* Ornamen lingkaran cahaya di pojok hero */
+.hero::after {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244, 63, 142, 0.35), transparent 70%);
+    filter: blur(10px);
+}
+
+.page-heading {
+    margin-bottom: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    border-left: 4px solid;
+    border-image: linear-gradient(var(--accent-2), var(--accent)) 1;
+    padding-left: 0.9rem;
+}
+
+/* ==================== KARTU POSTINGAN (GLASS CARD) ==================== */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+    gap: 1.5rem;
+}
+.card {
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+}
+/* MICRO-INTERACTION: kartu terangkat + tepi berpendar saat hover */
+.card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(139, 92, 246, 0.45);
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.45),
+        0 0 24px rgba(139, 92, 246, 0.15);
+}
+.card-cover { display: block; position: relative; overflow: hidden; }
+.card-cover img {
+    width: 100%;
+    height: 165px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+}
+/* Gambar zoom perlahan saat kursor di atas kartu */
+.card:hover .card-cover img { transform: scale(1.07); }
+.cover-placeholder {
+    height: 165px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(34, 211, 238, 0.3), transparent 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+.cover-placeholder.small { height: 95px; font-size: 1rem; }
+
+/* Badge rating kaca gelap dengan bintang emas */
+.rating-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fbbf24;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+.rating-badge.inline { position: static; }
+
+.card-body { padding: 1.1rem 1.15rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
+.card-category {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--accent-3), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: fit-content;
+}
+.card-title { font-size: 1.03rem; margin: 0.35rem 0; font-weight: 700; letter-spacing: -0.2px; }
+.card-title a { color: var(--text); }
+.card-title a:hover { color: var(--accent); }
+.card-excerpt { font-size: 0.87rem; color: var(--text-muted); margin-bottom: 0.9rem; flex: 1; }
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ==================== SIDEBAR ==================== */
+.widget {
+    background: var(--bg-card);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.3rem;
+    margin-bottom: 1.5rem;
+}
+.widget-title {
+    font-size: 0.98rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+.popular-item {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.55rem 0;
+    color: var(--text);
+    font-size: 0.87rem;
+    line-height: 1.45;
+    border-radius: 10px;
+    transition: background 0.2s, padding-left 0.2s;
+}
+/* Item bergeser halus saat hover */
+.popular-item:hover { background: rgba(255, 255, 255, 0.04); padding-left: 0.5rem; }
+.popular-item small { display: block; color: var(--text-muted); margin-top: 0.1rem; }
+.popular-rank {
+    font-weight: 800;
+    font-size: 1.05rem;
+    min-width: 1.4rem;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.cat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.2rem;
+    color: var(--text);
+    font-size: 0.88rem;
+    border-radius: 10px;
+    transition: background 0.2s, padding-left 0.2s;
+}
+.cat-item:hover { background: rgba(255, 255, 255, 0.04); padding-left: 0.6rem; }
+.cat-count {
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ==================== DETAIL ARTIKEL ==================== */
+.post-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.3;
+    margin: 0.5rem 0 0.9rem;
+}
+.post-cover {
+    width: 100%;
+    border-radius: var(--radius);
+    margin: 1.4rem 0;
+    max-height: 430px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+.post-content { font-size: 1.03rem; }
+.post-content p { margin-bottom: 1.05rem; }
+
+.section-title {
+    font-weight: 800;
+    margin: 2.4rem 0 1.1rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Artikel terkait */
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 1rem;
+}
+.related-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.84rem;
+    font-weight: 600;
+    transition: transform 0.25s, border-color 0.25s;
+}
+.related-card:hover { transform: translateY(-4px); border-color: rgba(244, 63, 142, 0.4); }
+.related-card img { width: 100%; height: 92px; object-fit: cover; display: block; }
+.related-card span { display: block; padding: 0.65rem 0.75rem; }
+
+/* ==================== KOMENTAR ==================== */
+.comment {
+    display: flex;
+    gap: 0.95rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+/* Avatar gradien otomatis dari huruf pertama nama komentator */
+.comment-avatar {
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+}
+.comment small { margin-left: 0.5rem; }
+
+.comment-form { margin-top: 1.8rem; }
+.comment-form h4 { margin-bottom: 0.9rem; font-weight: 700; }
+.form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.85rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+.form-input:focus {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+.btn-primary {
+    position: relative;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(244, 63, 142, 0.45);
+}
+
+/* ==================== LAIN-LAIN ==================== */
+.alert {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    margin-top: 1.2rem;
+    backdrop-filter: blur(6px);
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+.pagination a {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: all 0.22s;
+}
+.pagination a:hover {
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    border-color: transparent;
+    color: #fff;
+}
+.footer {
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+    padding: 1.8rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.87rem;
+}
+
+/* ==================== ANIMASI MASUK (SCROLL REVEAL RINGAN) ====================
+   Kartu muncul dengan efek naik + memudar saat halaman dimuat.
+   Murni CSS — tanpa JavaScript, tetap cepat. */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.card, .hero, .widget { animation: fadeUp 0.5s ease both; }
+/* Kartu muncul bergantian (staggered) agar terasa hidup */
+.post-grid .card:nth-child(2) { animation-delay: 0.06s; }
+.post-grid .card:nth-child(3) { animation-delay: 0.12s; }
+.post-grid .card:nth-child(4) { animation-delay: 0.18s; }
+.post-grid .card:nth-child(5) { animation-delay: 0.24s; }
+.post-grid .card:nth-child(6) { animation-delay: 0.30s; }
+
+/* Hargai preferensi pengguna yang menonaktifkan animasi (aksesibilitas) */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}

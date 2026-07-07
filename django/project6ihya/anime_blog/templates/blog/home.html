@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% comment %}
+============================================================
+HALAMAN DEPAN (home.html)
+Menampilkan daftar postingan dalam bentuk kartu (card grid),
+mendukung hasil pencarian dan paginasi.
+CATATAN: {% extends %} WAJIB menjadi tag pertama di template,
+karena itu komentar ini diletakkan setelahnya.
+============================================================
+{% endcomment %}
+
+{% block title %}AniBlog — Blog Anime Indonesia{% endblock %}
+
+{% block content %}
+
+    {# Jika sedang mencari, tampilkan info kata kunci #}
+    {% if query %}
+        <h2 class="page-heading">Hasil pencarian: "{{ query }}"</h2>
+    {% else %}
+        <!-- Banner sambutan di halaman depan -->
+        <div class="hero">
+            <h1>Selamat Datang di アニ<span>Blog</span></h1>
+            <p>Review, berita, dan rekomendasi anime terbaik dalam Bahasa Indonesia.</p>
+        </div>
+    {% endif %}
+
+    <!-- GRID KARTU POSTINGAN -->
+    <div class="post-grid">
+        {% for post in page_obj %}
+            <article class="card">
+                {# Gambar sampul: pakai URL jika ada, jika tidak pakai placeholder gradien. Catatan: komentar singkat Django wajib satu baris. #}
+                <a href="{{ post.get_absolute_url }}" class="card-cover">
+                    {% if post.cover_url %}
+                        <img src="{{ post.cover_url }}" alt="{{ post.title }}" loading="lazy">
+                    {% else %}
+                        <div class="cover-placeholder">アニメ</div>
+                    {% endif %}
+                    {# INOVASI: BADGE RATING di pojok kartu ala MyAnimeList — hanya tampil jika diisi. #}
+                    {% if post.rating %}
+                        <span class="rating-badge">★ {{ post.rating }}</span>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    {% if post.category %}
+                        <a href="{% url 'blog:category' post.category.slug %}" class="card-category">
+                            {{ post.category.name }}
+                        </a>
+                    {% endif %}
+                    <h2 class="card-title">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </h2>
+                    <p class="card-excerpt">{{ post.excerpt }}</p>
+                    <div class="card-meta">
+                        {# Estimasi waktu baca & jumlah views dihitung otomatis #}
+                        <span>📅 {{ post.created_at|date:"d M Y" }}</span>
+                        <span>⏱ {{ post.reading_time }} mnt baca</span>
+                        <span>👁 {{ post.views }}</span>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <p class="muted">
+                {% if query %}
+                    Tidak ada artikel yang cocok dengan "{{ query }}". Coba kata kunci lain.
+                {% else %}
+                    Belum ada postingan. Tambahkan lewat halaman <a href="/admin/">admin</a>.
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+
+    <!-- PAGINASI: tombol halaman sebelumnya/berikutnya -->
+    {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">‹ Sebelumnya</a>
+            {% endif %}
+            <span>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Berikutnya ›</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock %}

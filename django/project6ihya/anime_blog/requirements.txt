@@ -1,0 +1,3 @@
+# Daftar pustaka (library) yang dibutuhkan proyek ini.
+# Di laptop lain cukup jalankan: pip install -r requirements.txt
+Django>=6.0
